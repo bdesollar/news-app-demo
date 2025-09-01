@@ -83,20 +83,188 @@ const AnimatedRoutes = () => {
 
 const App = () => {
   useEffect(() => {
-    if (window.pendo) {
-      window.pendo.initialize({
+    // Random user profiles for Pendo demo variety
+    const demoUsers = [
+      {
         visitor: {
-          id: 'demo-visitor-123',
-          email: 'fron1973@gustr.com',
-          firstName: 'Demo',
-          lastName: 'User',
+          id: 'user-001',
+          email: 'sarah.chen@techcorp.com',
+          firstName: 'Sarah',
+          lastName: 'Chen',
+          role: 'Product Manager',
+          industry: 'Technology',
+          experience: 'Advanced'
         },
         account: {
-          id: 'demo-account-456',
-          accountName: 'News App Demo',
-          payingStatus: 'Free',
+          id: 'tech-corp-001',
+          accountName: 'TechCorp Industries',
+          payingStatus: 'Premium',
+          employeeCount: '1000+'
+        }
+      },
+      {
+        visitor: {
+          id: 'user-002',
+          email: 'mike.rodriguez@startup.io',
+          firstName: 'Mike',
+          lastName: 'Rodriguez',
+          role: 'Founder',
+          industry: 'Startup',
+          experience: 'Expert'
         },
-      });
+        account: {
+          id: 'startup-002',
+          accountName: 'Innovation Startup',
+          payingStatus: 'Free',
+          employeeCount: '1-10'
+        }
+      },
+      {
+        visitor: {
+          id: 'user-003',
+          email: 'emily.johnson@marketing.agency',
+          firstName: 'Emily',
+          lastName: 'Johnson',
+          role: 'Marketing Director',
+          industry: 'Marketing',
+          experience: 'Intermediate'
+        },
+        account: {
+          id: 'marketing-003',
+          accountName: 'Creative Marketing Agency',
+          payingStatus: 'Premium',
+          employeeCount: '50-100'
+        }
+      },
+      {
+        visitor: {
+          id: 'user-004',
+          email: 'david.kim@finance.com',
+          firstName: 'David',
+          lastName: 'Kim',
+          role: 'Financial Analyst',
+          industry: 'Finance',
+          experience: 'Beginner'
+        },
+        account: {
+          id: 'finance-004',
+          accountName: 'Global Finance Corp',
+          payingStatus: 'Trial',
+          employeeCount: '500-1000'
+        }
+      },
+      {
+        visitor: {
+          id: 'user-005',
+          email: 'jessica.brown@healthcare.org',
+          firstName: 'Jessica',
+          lastName: 'Brown',
+          role: 'Operations Manager',
+          industry: 'Healthcare',
+          experience: 'Advanced'
+        },
+        account: {
+          id: 'healthcare-005',
+          accountName: 'City Healthcare System',
+          payingStatus: 'Premium',
+          employeeCount: '1000+'
+        }
+      },
+      {
+        visitor: {
+          id: 'user-006',
+          email: 'alex.thompson@edu.university',
+          firstName: 'Alex',
+          lastName: 'Thompson',
+          role: 'Student',
+          industry: 'Education',
+          experience: 'Beginner'
+        },
+        account: {
+          id: 'university-006',
+          accountName: 'State University',
+          payingStatus: 'Student',
+          employeeCount: '100-500'
+        }
+      },
+      {
+        visitor: {
+          id: 'user-007',
+          email: 'maria.garcia@retail.store',
+          firstName: 'Maria',
+          lastName: 'Garcia',
+          role: 'Store Manager',
+          industry: 'Retail',
+          experience: 'Intermediate'
+        },
+        account: {
+          id: 'retail-007',
+          accountName: 'Fashion Retail Chain',
+          payingStatus: 'Basic',
+          employeeCount: '100-500'
+        }
+      },
+      {
+        visitor: {
+          id: 'user-008',
+          email: 'james.wilson@consulting.biz',
+          firstName: 'James',
+          lastName: 'Wilson',
+          role: 'Senior Consultant',
+          industry: 'Consulting',
+          experience: 'Expert'
+        },
+        account: {
+          id: 'consulting-008',
+          accountName: 'Strategic Consulting Group',
+          payingStatus: 'Enterprise',
+          employeeCount: '500-1000'
+        }
+      },
+      {
+        visitor: {
+          id: 'user-009',
+          email: 'lisa.davis@nonprofit.org',
+          firstName: 'Lisa',
+          lastName: 'Davis',
+          role: 'Program Director',
+          industry: 'Non-Profit',
+          experience: 'Advanced'
+        },
+        account: {
+          id: 'nonprofit-009',
+          accountName: 'Community Foundation',
+          payingStatus: 'Non-Profit',
+          employeeCount: '10-50'
+        }
+      },
+      {
+        visitor: {
+          id: 'user-010',
+          email: 'robert.lee@manufacturing.com',
+          firstName: 'Robert',
+          lastName: 'Lee',
+          role: 'Operations Director',
+          industry: 'Manufacturing',
+          experience: 'Expert'
+        },
+        account: {
+          id: 'manufacturing-010',
+          accountName: 'Industrial Manufacturing Ltd',
+          payingStatus: 'Premium',
+          employeeCount: '1000+'
+        }
+      }
+    ];
+
+    // Randomly select a user for this session
+    const randomUser = demoUsers[Math.floor(Math.random() * demoUsers.length)];
+
+    if (window.pendo) {
+      window.pendo.initialize(randomUser);
+      
+      // Track which user was selected for debugging
+      console.log('Pendo initialized with user:', randomUser.visitor.firstName, randomUser.visitor.lastName);
     }
   }, []);
 
