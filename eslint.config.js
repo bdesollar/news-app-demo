@@ -3,7 +3,8 @@ import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import { defineConfig, globalIgnores } from 'eslint/config';
-import react from 'eslint-plugin-react'; // Added react plugin
+import react from 'eslint-plugin-react';
+import prettier from 'eslint-plugin-prettier';
 
 export default defineConfig([
   globalIgnores(['dist']),
@@ -13,10 +14,12 @@ export default defineConfig([
       js.configs.recommended,
       reactHooks.configs['recommended-latest'],
       reactRefresh.configs.vite,
-      'plugin:react/recommended', // Added recommended React rules
+      'plugin:react/recommended',
+      'plugin:prettier/recommended',
     ],
     plugins: {
-      react, // Register react plugin
+      react,
+      prettier,
     },
     languageOptions: {
       ecmaVersion: 2020,
@@ -28,8 +31,9 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }], // Keep existing rule
-      'react/jsx-uses-vars': 'error', // Added to recognize JSX usage
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      'react/jsx-uses-vars': 'error',
+      'prettier/prettier': 'error',
     },
   },
 ]);

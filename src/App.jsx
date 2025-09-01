@@ -1,5 +1,11 @@
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion'; // Correct import
 import HomePage from './pages/HomePage.jsx';
 import ArticlePage from './pages/ArticlePage.jsx';
@@ -12,12 +18,13 @@ import Footer from './components/Footer.jsx';
 const AnimatedRoutes = () => {
   const location = useLocation();
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode='wait'>
       <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<HomePage />} /> {/* Homepage at root */}
-        <Route path="/article" element={<ArticlePage />} />
-        <Route path="/category/:catName" element={<CategoryPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} /> {/* Redirect unmatched routes to homepage */}
+        <Route path='/' element={<HomePage />} /> {/* Homepage at root */}
+        <Route path='/article' element={<ArticlePage />} />
+        <Route path='/category/:catName' element={<CategoryPage />} />
+        <Route path='*' element={<Navigate to='/' replace />} />{' '}
+        {/* Redirect unmatched routes to homepage */}
       </Routes>
     </AnimatePresence>
   );
@@ -54,10 +61,10 @@ const App = () => {
 
   return (
     <Router>
-      <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className='min-h-screen flex flex-col bg-gray-50'>
         <Header />
         <Nav />
-        <main className="flex-grow container mx-auto px-6 py-10 bg-transparent">
+        <main className='flex-grow container mx-auto px-6 py-10 bg-transparent'>
           <AnimatedRoutes />
         </main>
         <Footer />
