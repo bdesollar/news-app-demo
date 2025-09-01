@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import HomePage from './pages/HomePage.jsx';
@@ -82,190 +82,263 @@ const AnimatedRoutes = () => {
 };
 
 const App = () => {
-  useEffect(() => {
-    // Random user profiles for Pendo demo variety
-    const demoUsers = [
-      {
-        visitor: {
-          id: 'user-001',
-          email: 'sarah.chen@techcorp.com',
-          firstName: 'Sarah',
-          lastName: 'Chen',
-          role: 'Product Manager',
-          industry: 'Technology',
-          experience: 'Advanced'
-        },
-        account: {
-          id: 'tech-corp-001',
-          accountName: 'TechCorp Industries',
-          payingStatus: 'Premium',
-          employeeCount: '1000+'
-        }
-      },
-      {
-        visitor: {
-          id: 'user-002',
-          email: 'mike.rodriguez@startup.io',
-          firstName: 'Mike',
-          lastName: 'Rodriguez',
-          role: 'Founder',
-          industry: 'Startup',
-          experience: 'Expert'
-        },
-        account: {
-          id: 'startup-002',
-          accountName: 'Innovation Startup',
-          payingStatus: 'Free',
-          employeeCount: '1-10'
-        }
-      },
-      {
-        visitor: {
-          id: 'user-003',
-          email: 'emily.johnson@marketing.agency',
-          firstName: 'Emily',
-          lastName: 'Johnson',
-          role: 'Marketing Director',
-          industry: 'Marketing',
-          experience: 'Intermediate'
-        },
-        account: {
-          id: 'marketing-003',
-          accountName: 'Creative Marketing Agency',
-          payingStatus: 'Premium',
-          employeeCount: '50-100'
-        }
-      },
-      {
-        visitor: {
-          id: 'user-004',
-          email: 'david.kim@finance.com',
-          firstName: 'David',
-          lastName: 'Kim',
-          role: 'Financial Analyst',
-          industry: 'Finance',
-          experience: 'Beginner'
-        },
-        account: {
-          id: 'finance-004',
-          accountName: 'Global Finance Corp',
-          payingStatus: 'Trial',
-          employeeCount: '500-1000'
-        }
-      },
-      {
-        visitor: {
-          id: 'user-005',
-          email: 'jessica.brown@healthcare.org',
-          firstName: 'Jessica',
-          lastName: 'Brown',
-          role: 'Operations Manager',
-          industry: 'Healthcare',
-          experience: 'Advanced'
-        },
-        account: {
-          id: 'healthcare-005',
-          accountName: 'City Healthcare System',
-          payingStatus: 'Premium',
-          employeeCount: '1000+'
-        }
-      },
-      {
-        visitor: {
-          id: 'user-006',
-          email: 'alex.thompson@edu.university',
-          firstName: 'Alex',
-          lastName: 'Thompson',
-          role: 'Student',
-          industry: 'Education',
-          experience: 'Beginner'
-        },
-        account: {
-          id: 'university-006',
-          accountName: 'State University',
-          payingStatus: 'Student',
-          employeeCount: '100-500'
-        }
-      },
-      {
-        visitor: {
-          id: 'user-007',
-          email: 'maria.garcia@retail.store',
-          firstName: 'Maria',
-          lastName: 'Garcia',
-          role: 'Store Manager',
-          industry: 'Retail',
-          experience: 'Intermediate'
-        },
-        account: {
-          id: 'retail-007',
-          accountName: 'Fashion Retail Chain',
-          payingStatus: 'Basic',
-          employeeCount: '100-500'
-        }
-      },
-      {
-        visitor: {
-          id: 'user-008',
-          email: 'james.wilson@consulting.biz',
-          firstName: 'James',
-          lastName: 'Wilson',
-          role: 'Senior Consultant',
-          industry: 'Consulting',
-          experience: 'Expert'
-        },
-        account: {
-          id: 'consulting-008',
-          accountName: 'Strategic Consulting Group',
-          payingStatus: 'Enterprise',
-          employeeCount: '500-1000'
-        }
-      },
-      {
-        visitor: {
-          id: 'user-009',
-          email: 'lisa.davis@nonprofit.org',
-          firstName: 'Lisa',
-          lastName: 'Davis',
-          role: 'Program Director',
-          industry: 'Non-Profit',
-          experience: 'Advanced'
-        },
-        account: {
-          id: 'nonprofit-009',
-          accountName: 'Community Foundation',
-          payingStatus: 'Non-Profit',
-          employeeCount: '10-50'
-        }
-      },
-      {
-        visitor: {
-          id: 'user-010',
-          email: 'robert.lee@manufacturing.com',
-          firstName: 'Robert',
-          lastName: 'Lee',
-          role: 'Operations Director',
-          industry: 'Manufacturing',
-          experience: 'Expert'
-        },
-        account: {
-          id: 'manufacturing-010',
-          accountName: 'Industrial Manufacturing Ltd',
-          payingStatus: 'Premium',
-          employeeCount: '1000+'
-        }
+  const [currentUser, setCurrentUser] = useState(null);
+
+  // Function to switch to a different random user (for testing)
+  const switchUser = () => {
+    if (window.currentPendoUser && demoUsers) {
+      const currentIndex = demoUsers.findIndex(user => user.visitor.id === window.currentPendoUser.visitor.id);
+      let newIndex = Math.floor(Math.random() * demoUsers.length);
+      // Ensure we get a different user
+      while (newIndex === currentIndex && demoUsers.length > 1) {
+        newIndex = Math.floor(Math.random() * demoUsers.length);
       }
-    ];
-
-    // Randomly select a user for this session
-    const randomUser = demoUsers[Math.floor(Math.random() * demoUsers.length)];
-
-    if (window.pendo) {
-      window.pendo.initialize(randomUser);
+      const newUser = demoUsers[newIndex];
       
-      // Track which user was selected for debugging
-      console.log('Pendo initialized with user:', randomUser.visitor.firstName, randomUser.visitor.lastName);
+      if (window.pendo && window.pendo.identify) {
+        window.pendo.identify(newUser);
+        window.currentPendoUser = newUser;
+        setCurrentUser(newUser);
+        console.log('🔄 Manually switched to user:', newUser.visitor.firstName, newUser.visitor.lastName);
+        
+        // Trigger page load to refresh guides
+        setTimeout(() => {
+          if (window.pendo && window.pendo.pageLoad) {
+            window.pendo.pageLoad();
+          }
+        }, 100);
+      }
     }
+  };
+
+  // Demo users array (moved outside useEffect for access in switchUser)
+  const demoUsers = [
+    {
+      visitor: {
+        id: 'user-001',
+        email: 'sarah.chen@techcorp.com',
+        firstName: 'Sarah',
+        lastName: 'Chen',
+        role: 'Product Manager',
+        industry: 'Technology',
+        experience: 'Advanced'
+      },
+      account: {
+        id: 'tech-corp-001',
+        accountName: 'TechCorp Industries',
+        payingStatus: 'Premium',
+        employeeCount: '1000+'
+      }
+    },
+    {
+      visitor: {
+        id: 'user-002',
+        email: 'mike.rodriguez@startup.io',
+        firstName: 'Mike',
+        lastName: 'Rodriguez',
+        role: 'Founder',
+        industry: 'Startup',
+        experience: 'Expert'
+      },
+      account: {
+        id: 'startup-002',
+        accountName: 'Innovation Startup',
+        payingStatus: 'Free',
+        employeeCount: '1-10'
+      }
+    },
+    {
+      visitor: {
+        id: 'user-003',
+        email: 'emily.johnson@marketing.agency',
+        firstName: 'Emily',
+        lastName: 'Johnson',
+        role: 'Marketing Director',
+        industry: 'Marketing',
+        experience: 'Intermediate'
+      },
+      account: {
+        id: 'marketing-003',
+        accountName: 'Creative Marketing Agency',
+        payingStatus: 'Premium',
+        employeeCount: '50-100'
+      }
+    },
+    {
+      visitor: {
+        id: 'user-004',
+        email: 'david.kim@finance.com',
+        firstName: 'David',
+        lastName: 'Kim',
+        role: 'Financial Analyst',
+        industry: 'Finance',
+        experience: 'Beginner'
+      },
+      account: {
+        id: 'finance-004',
+        accountName: 'Global Finance Corp',
+        payingStatus: 'Trial',
+        employeeCount: '500-1000'
+      }
+    },
+    {
+      visitor: {
+        id: 'user-005',
+        email: 'jessica.brown@healthcare.org',
+        firstName: 'Jessica',
+        lastName: 'Brown',
+        role: 'Operations Manager',
+        industry: 'Healthcare',
+        experience: 'Advanced'
+      },
+      account: {
+        id: 'healthcare-005',
+        accountName: 'City Healthcare System',
+        payingStatus: 'Premium',
+        employeeCount: '1000+'
+      }
+    },
+    {
+      visitor: {
+        id: 'user-006',
+        email: 'alex.thompson@edu.university',
+        firstName: 'Alex',
+        lastName: 'Thompson',
+        role: 'Student',
+        industry: 'Education',
+        experience: 'Beginner'
+      },
+      account: {
+        id: 'university-006',
+        accountName: 'State University',
+        payingStatus: 'Student',
+        employeeCount: '100-500'
+      }
+    },
+    {
+      visitor: {
+        id: 'user-007',
+        email: 'maria.garcia@retail.store',
+        firstName: 'Maria',
+        lastName: 'Garcia',
+        role: 'Store Manager',
+        industry: 'Retail',
+        experience: 'Intermediate'
+      },
+      account: {
+        id: 'retail-007',
+        accountName: 'Fashion Retail Chain',
+        payingStatus: 'Basic',
+        employeeCount: '100-500'
+      }
+    },
+    {
+      visitor: {
+        id: 'user-008',
+        email: 'james.wilson@consulting.biz',
+        firstName: 'James',
+        lastName: 'Wilson',
+        role: 'Senior Consultant',
+        industry: 'Consulting',
+        experience: 'Expert'
+      },
+      account: {
+        id: 'consulting-008',
+        accountName: 'Strategic Consulting Group',
+        payingStatus: 'Enterprise',
+        employeeCount: '500-1000'
+      }
+    },
+    {
+      visitor: {
+        id: 'user-009',
+        email: 'lisa.davis@nonprofit.org',
+        firstName: 'Lisa',
+        lastName: 'Davis',
+        role: 'Program Director',
+        industry: 'Non-Profit',
+        experience: 'Advanced'
+      },
+      account: {
+        id: 'nonprofit-009',
+        accountName: 'Community Foundation',
+        payingStatus: 'Non-Profit',
+        employeeCount: '10-50'
+      }
+    },
+    {
+      visitor: {
+        id: 'user-010',
+        email: 'robert.lee@manufacturing.com',
+        firstName: 'Robert',
+        lastName: 'Lee',
+        role: 'Operations Director',
+        industry: 'Manufacturing',
+        experience: 'Expert'
+      },
+      account: {
+        id: 'manufacturing-010',
+        accountName: 'Industrial Manufacturing Ltd',
+        payingStatus: 'Premium',
+        employeeCount: '1000+'
+      }
+    }
+  ];
+
+  useEffect(() => {
+
+    // Function to wait for Pendo to be ready
+    const waitForPendo = (callback, maxAttempts = 50) => {
+      let attempts = 0;
+      const checkPendo = () => {
+        if (window.pendo && window.pendo.initialize) {
+          callback();
+        } else if (attempts < maxAttempts) {
+          attempts++;
+          setTimeout(checkPendo, 100);
+        } else {
+          console.error('Pendo failed to load after maximum attempts');
+        }
+      };
+      checkPendo();
+    };
+
+    // Initialize Pendo with proper user switching for SPA
+    const initializePendoWithUser = () => {
+      // Randomly select a user for this session
+      const randomUser = demoUsers[Math.floor(Math.random() * demoUsers.length)];
+      
+      try {
+        // For SPAs, we need to handle user switching properly
+        if (window.pendo._isInitialized) {
+          // If already initialized, use identify to switch users
+          window.pendo.identify(randomUser);
+          console.log('🔄 Pendo user switched to:', randomUser.visitor.firstName, randomUser.visitor.lastName);
+        } else {
+          // First time initialization
+          window.pendo.initialize(randomUser);
+          console.log('🚀 Pendo initialized with user:', randomUser.visitor.firstName, randomUser.visitor.lastName);
+        }
+        
+        // Store current user for debugging
+        window.currentPendoUser = randomUser;
+        setCurrentUser(randomUser);
+        
+        // Track page load for the new user
+        setTimeout(() => {
+          if (window.pendo && window.pendo.pageLoad) {
+            window.pendo.pageLoad();
+          }
+        }, 500);
+        
+      } catch (error) {
+        console.error('Error initializing Pendo:', error);
+      }
+    };
+
+    // Wait for Pendo script to load, then initialize
+    waitForPendo(initializePendoWithUser);
+    
   }, []);
 
   return (
@@ -273,6 +346,25 @@ const App = () => {
       <div className="min-h-screen flex flex-col bg-gray-100">
         <Header />
         <SubscriptionBanner /> {/* Embedded banner here */}
+        
+        {/* User Switcher for Demo - Only visible in development */}
+        {process.env.NODE_ENV === 'development' && currentUser && (
+          <div className="bg-yellow-100 border-b border-yellow-200 px-4 py-2 text-sm text-yellow-800">
+            <div className="flex items-center justify-between max-w-6xl mx-auto">
+              <span>
+                🧪 <strong>Demo Mode:</strong> Current user: {currentUser.visitor.firstName} {currentUser.visitor.lastName} 
+                ({currentUser.account.payingStatus}) - {currentUser.visitor.role}
+              </span>
+              <button
+                onClick={switchUser}
+                className="bg-yellow-200 hover:bg-yellow-300 px-3 py-1 rounded text-yellow-800 font-medium transition-colors"
+              >
+                Switch User
+              </button>
+            </div>
+          </div>
+        )}
+        
         <Nav />
         <main className="flex-grow container mx-auto px-4 py-8 bg-gray-100">
           <AnimatedRoutes />
