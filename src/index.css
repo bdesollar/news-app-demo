@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+:root {
+  --color-pendoPink: #FF4876; /* Pendo's signature "Pank" for flair */
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f5f5f5; /* Light gray background */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global link styles */
+a {
+  text-decoration: none;
+}
+
+/* Ensure clean typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Clean input styling */
+input, button {
+  font-family: inherit;
+}
