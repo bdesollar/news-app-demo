@@ -1,12 +1,6 @@
 import { useEffect } from 'react';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-  Navigate,
-} from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion'; // Correct import
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import HomePage from './pages/HomePage.jsx';
 import ArticlePage from './pages/ArticlePage.jsx';
 import CategoryPage from './pages/CategoryPage.jsx';
@@ -14,17 +8,74 @@ import Header from './components/Header.jsx';
 import Nav from './components/Nav.jsx';
 import Footer from './components/Footer.jsx';
 
-// Wrapper for page transitions
+// Simple Subscription Banner Component for Pendo Demo
+const SubscriptionBanner = () => {
+  const handleClaimOffer = () => {
+    if (window.pendo) {
+      window.pendo.track('Banner Clicked', { 
+        action: 'Claim Offer',
+        banner_type: 'embedded_guide'
+      });
+    }
+    alert('Thanks for your interest! In a real app, this would redirect to the subscription page.');
+  };
+
+  const handleClose = () => {
+    if (window.pendo) {
+      window.pendo.track('Banner Clicked', { 
+        action: 'Banner Dismissed',
+        banner_type: 'embedded_guide'
+      });
+    }
+    const banner = document.getElementById('pendo-banner-top');
+    if (banner) {
+      banner.style.display = 'none';
+    }
+  };
+
+  return (
+    <div
+      id="pendo-banner-top"
+      className="w-full bg-gradient-to-r from-[#FF4876] to-[#FF6B8E] text-white py-4 px-6 shadow-md"
+    >
+      <div className="flex items-center justify-between max-w-6xl mx-auto">
+        <div className="flex-1">
+          <p className="text-lg font-semibold">Subscribe now for 50% off!</p>
+          <p className="text-sm opacity-90">Get unlimited access to premium content</p>
+        </div>
+        
+        <div className="flex items-center space-x-4">
+          <button
+            onClick={handleClaimOffer}
+            className="bg-white text-[#FF4876] font-semibold py-2 px-6 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            Claim Offer
+          </button>
+          
+          <button
+            onClick={handleClose}
+            className="text-white hover:text-gray-200 transition-colors"
+            aria-label="Close banner"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const AnimatedRoutes = () => {
   const location = useLocation();
   return (
-    <AnimatePresence mode='wait'>
+    <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        <Route path='/' element={<HomePage />} /> {/* Homepage at root */}
-        <Route path='/article' element={<ArticlePage />} />
-        <Route path='/category/:catName' element={<CategoryPage />} />
-        <Route path='*' element={<Navigate to='/' replace />} />{' '}
-        {/* Redirect unmatched routes to homepage */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/article" element={<ArticlePage />} />
+        <Route path="/category/:catName" element={<CategoryPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AnimatePresence>
   );
@@ -32,39 +83,30 @@ const AnimatedRoutes = () => {
 
 const App = () => {
   useEffect(() => {
-    // Wait for Pendo to be available, then initialize
-    const initializePendo = () => {
-      if (window.pendo) {
-        window.pendo.initialize({
-          visitor: {
-            id: 'demo-visitor-123',
-            email: 'fron1973@gustr.com',
-            full_name: 'Demo User',
-            role: 'demo-user',
-          },
-          account: {
-            id: 'demo-account-456',
-            name: 'News App Demo',
-            is_paying: false,
-            planLevel: 'free',
-            creationDate: new Date().toISOString(),
-          },
-        });
-      } else {
-        // If Pendo isn't loaded yet, try again in 100ms
-        setTimeout(initializePendo, 100);
-      }
-    };
-
-    initializePendo();
+    if (window.pendo) {
+      window.pendo.initialize({
+        visitor: {
+          id: 'demo-visitor-123',
+          email: 'fron1973@gustr.com',
+          firstName: 'Demo',
+          lastName: 'User',
+        },
+        account: {
+          id: 'demo-account-456',
+          accountName: 'News App Demo',
+          payingStatus: 'Free',
+        },
+      });
+    }
   }, []);
 
   return (
     <Router>
-      <div className='min-h-screen flex flex-col bg-gray-50'>
+      <div className="min-h-screen flex flex-col bg-gray-100">
         <Header />
+        <SubscriptionBanner /> {/* Embedded banner here */}
         <Nav />
-        <main className='flex-grow container mx-auto px-6 py-10 bg-transparent'>
+        <main className="flex-grow container mx-auto px-4 py-8 bg-gray-100">
           <AnimatedRoutes />
         </main>
         <Footer />
