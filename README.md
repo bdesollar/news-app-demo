@@ -2,6 +2,8 @@
 
 A React + Vite demo styled with Tailwind CSS, with Pendo instrumentation and optional Firebase setup.
 
+**🌐 Live Demo:** [https://news-app-demo-abd52.web.app](https://news-app-demo-abd52.web.app)
+
 ### Prerequisites
 
 - Node.js 24+ (project declares `"engines": { "node": ">=24" }`)
