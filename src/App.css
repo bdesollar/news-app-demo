@@ -40,3 +40,19 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Pendo Banner Top - Custom CSS Class - Matches original Tailwind */
+.pendo-banner-top {
+  width: 100% !important;
+  background: linear-gradient(to right, #FF4876, #FF6B8E) !important;
+  color: white !important;
+  padding: 1rem 1.5rem !important; /* py-4 px-6 */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important; /* shadow-md */
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 640px) {
+  .pendo-banner-top {
+    padding: 0.75rem 1rem !important; /* Smaller padding on mobile */
+  }
+}

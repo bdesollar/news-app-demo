@@ -36,18 +36,18 @@ const SubscriptionBanner = () => {
   return (
     <div
       id="pendo-banner-top"
-      className="w-full bg-gradient-to-r from-[#FF4876] to-[#FF6B8E] text-white py-4 px-6 shadow-md"
+      className="pendo-banner-top w-full bg-gradient-to-r from-[#FF4876] to-[#FF6B8E] text-white py-4 px-6 shadow-md"
     >
-      <div className="flex items-center justify-between max-w-6xl mx-auto">
-        <div className="flex-1">
-          <p className="text-lg font-semibold">Subscribe now for 50% off!</p>
-          <p className="text-sm opacity-90">Get unlimited access to premium content</p>
+      <div className="flex flex-col sm:flex-row items-center justify-between max-w-6xl mx-auto px-4 sm:px-0">
+        <div className="flex-1 text-center sm:text-left mb-3 sm:mb-0">
+          <p className="text-base sm:text-lg font-semibold">Subscribe now for 50% off!</p>
+          <p className="text-xs sm:text-sm opacity-90">Get unlimited access to premium content</p>
         </div>
         
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-3 sm:space-x-4">
           <button
             onClick={handleClaimOffer}
-            className="bg-white text-[#FF4876] font-semibold py-2 px-6 rounded-lg hover:bg-gray-100 transition-colors"
+            className="bg-white text-[#FF4876] font-semibold py-2 px-4 sm:px-6 rounded-lg hover:bg-gray-100 transition-colors text-sm"
           >
             Claim Offer
           </button>
@@ -334,15 +334,15 @@ const App = () => {
         
         {/* User Switcher for Demo - Only visible in development */}
         {process.env.NODE_ENV === 'development' && currentUser && (
-          <div className="bg-yellow-100 border-b border-yellow-200 px-4 py-2 text-sm text-yellow-800">
-            <div className="flex items-center justify-between max-w-6xl mx-auto">
-              <span>
+          <div className="bg-yellow-100 border-b border-yellow-200 px-4 py-2 text-xs sm:text-sm text-yellow-800">
+            <div className="flex flex-col sm:flex-row items-center justify-between max-w-6xl mx-auto gap-2 sm:gap-0">
+              <span className="text-center sm:text-left">
                 🧪 <strong>Demo Mode:</strong> Current user: {currentUser.visitor.firstName} {currentUser.visitor.lastName} 
-                ({currentUser.account.payingStatus}) - {currentUser.visitor.role}
+                ({currentUser.account.payingStatus})
               </span>
               <button
                 onClick={switchUser}
-                className="bg-yellow-200 hover:bg-yellow-300 px-3 py-1 rounded text-yellow-800 font-medium transition-colors"
+                className="bg-yellow-200 hover:bg-yellow-300 px-3 py-1 rounded text-yellow-800 font-medium transition-colors text-xs sm:text-sm"
               >
                 Switch User
               </button>
@@ -351,7 +351,7 @@ const App = () => {
         )}
         
         <Nav />
-        <main className="flex-grow container mx-auto px-4 py-8 bg-gray-100">
+        <main className="flex-grow container mx-auto px-2 sm:px-4 py-4 sm:py-8 bg-gray-100">
           <AnimatedRoutes />
         </main>
         <Footer />

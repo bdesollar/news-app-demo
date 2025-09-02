@@ -10,13 +10,13 @@ const Nav = () => {
   };
 
   return (
-    <nav className='bg-white border-b border-gray-200 py-4'>
-      <ul className='flex justify-center space-x-10'>
+    <nav className='bg-white border-b border-gray-200 py-3 sm:py-4'>
+      <ul className='flex justify-center space-x-4 sm:space-x-10 px-4 sm:px-0'>
         {categories.map(cat => (
           <li key={cat}>
             <Link
               to={`/category/${cat.toLowerCase()}`}
-              className='text-gray-700 hover:text-gray-900 text-sm font-medium tracking-wide'
+              className='text-gray-700 hover:text-gray-900 text-xs sm:text-sm font-medium tracking-wide whitespace-nowrap'
               onClick={() => handleCategoryClick(cat)}
             >
               {cat.toUpperCase()}

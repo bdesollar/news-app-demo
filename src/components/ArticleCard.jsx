@@ -18,7 +18,7 @@ const ArticleCard = ({
 
   return (
     <motion.div
-      className={`bg-white p-6 rounded-lg border border-gray-200`} // White cards with rounded corners
+      className="p-6 rounded-lg border border-transparent hover:border-gray-300 hover:shadow-sm transition-all duration-200 cursor-pointer"
       whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.2 }}
     >
