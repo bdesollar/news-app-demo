@@ -84,7 +84,7 @@ const AnimatedRoutes = () => {
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
-  // Function to switch to a different random user (for testing)
+  // Function to switch to a different random user (for testing) - Using Official Format
   const switchUser = () => {
     if (window.currentPendoUser && demoUsers) {
       const currentIndex = demoUsers.findIndex(user => user.visitor.id === window.currentPendoUser.visitor.id);
@@ -96,7 +96,20 @@ const App = () => {
       const newUser = demoUsers[newIndex];
       
       if (window.pendo && window.pendo.identify) {
-        window.pendo.identify(newUser);
+        // Use official identify format for user switching
+        pendo.identify({
+          visitor: {
+            id: newUser.visitor.id,
+            email: newUser.visitor.email,
+            firstName: newUser.visitor.firstName,
+            lastName: newUser.visitor.lastName,
+          },
+          account: {
+            id: newUser.account.id,
+            accountName: newUser.account.accountName,
+            payingStatus: newUser.account.payingStatus,
+          }
+        });
         window.currentPendoUser = newUser;
         setCurrentUser(newUser);
         console.log('🔄 Manually switched to user:', newUser.visitor.firstName, newUser.visitor.lastName);
@@ -111,7 +124,7 @@ const App = () => {
     }
   };
 
-  // Demo users array (moved outside useEffect for access in switchUser)
+  // Demo users array - Using exact Pendo format
   const demoUsers = [
     {
       visitor: {
@@ -119,15 +132,11 @@ const App = () => {
         email: 'sarah.chen@techcorp.com',
         firstName: 'Sarah',
         lastName: 'Chen',
-        role: 'Product Manager',
-        industry: 'Technology',
-        experience: 'Advanced'
       },
       account: {
         id: 'tech-corp-001',
         accountName: 'TechCorp Industries',
         payingStatus: 'Premium',
-        employeeCount: '1000+'
       }
     },
     {
@@ -136,15 +145,11 @@ const App = () => {
         email: 'mike.rodriguez@startup.io',
         firstName: 'Mike',
         lastName: 'Rodriguez',
-        role: 'Founder',
-        industry: 'Startup',
-        experience: 'Expert'
       },
       account: {
         id: 'startup-002',
         accountName: 'Innovation Startup',
         payingStatus: 'Free',
-        employeeCount: '1-10'
       }
     },
     {
@@ -153,15 +158,11 @@ const App = () => {
         email: 'emily.johnson@marketing.agency',
         firstName: 'Emily',
         lastName: 'Johnson',
-        role: 'Marketing Director',
-        industry: 'Marketing',
-        experience: 'Intermediate'
       },
       account: {
         id: 'marketing-003',
         accountName: 'Creative Marketing Agency',
         payingStatus: 'Premium',
-        employeeCount: '50-100'
       }
     },
     {
@@ -170,15 +171,11 @@ const App = () => {
         email: 'david.kim@finance.com',
         firstName: 'David',
         lastName: 'Kim',
-        role: 'Financial Analyst',
-        industry: 'Finance',
-        experience: 'Beginner'
       },
       account: {
         id: 'finance-004',
         accountName: 'Global Finance Corp',
         payingStatus: 'Trial',
-        employeeCount: '500-1000'
       }
     },
     {
@@ -187,15 +184,11 @@ const App = () => {
         email: 'jessica.brown@healthcare.org',
         firstName: 'Jessica',
         lastName: 'Brown',
-        role: 'Operations Manager',
-        industry: 'Healthcare',
-        experience: 'Advanced'
       },
       account: {
         id: 'healthcare-005',
         accountName: 'City Healthcare System',
         payingStatus: 'Premium',
-        employeeCount: '1000+'
       }
     },
     {
@@ -204,15 +197,11 @@ const App = () => {
         email: 'alex.thompson@edu.university',
         firstName: 'Alex',
         lastName: 'Thompson',
-        role: 'Student',
-        industry: 'Education',
-        experience: 'Beginner'
       },
       account: {
         id: 'university-006',
         accountName: 'State University',
         payingStatus: 'Student',
-        employeeCount: '100-500'
       }
     },
     {
@@ -221,15 +210,11 @@ const App = () => {
         email: 'maria.garcia@retail.store',
         firstName: 'Maria',
         lastName: 'Garcia',
-        role: 'Store Manager',
-        industry: 'Retail',
-        experience: 'Intermediate'
       },
       account: {
         id: 'retail-007',
         accountName: 'Fashion Retail Chain',
         payingStatus: 'Basic',
-        employeeCount: '100-500'
       }
     },
     {
@@ -238,15 +223,11 @@ const App = () => {
         email: 'james.wilson@consulting.biz',
         firstName: 'James',
         lastName: 'Wilson',
-        role: 'Senior Consultant',
-        industry: 'Consulting',
-        experience: 'Expert'
       },
       account: {
         id: 'consulting-008',
         accountName: 'Strategic Consulting Group',
         payingStatus: 'Enterprise',
-        employeeCount: '500-1000'
       }
     },
     {
@@ -255,15 +236,11 @@ const App = () => {
         email: 'lisa.davis@nonprofit.org',
         firstName: 'Lisa',
         lastName: 'Davis',
-        role: 'Program Director',
-        industry: 'Non-Profit',
-        experience: 'Advanced'
       },
       account: {
         id: 'nonprofit-009',
         accountName: 'Community Foundation',
         payingStatus: 'Non-Profit',
-        employeeCount: '10-50'
       }
     },
     {
@@ -272,15 +249,11 @@ const App = () => {
         email: 'robert.lee@manufacturing.com',
         firstName: 'Robert',
         lastName: 'Lee',
-        role: 'Operations Director',
-        industry: 'Manufacturing',
-        experience: 'Expert'
       },
       account: {
         id: 'manufacturing-010',
         accountName: 'Industrial Manufacturing Ltd',
         payingStatus: 'Premium',
-        employeeCount: '1000+'
       }
     }
   ];
@@ -303,7 +276,7 @@ const App = () => {
       checkPendo();
     };
 
-    // Initialize Pendo with proper user switching for SPA
+    // Initialize Pendo with proper user switching for SPA - Using Official Format
     const initializePendoWithUser = () => {
       // Randomly select a user for this session
       const randomUser = demoUsers[Math.floor(Math.random() * demoUsers.length)];
@@ -315,8 +288,20 @@ const App = () => {
           window.pendo.identify(randomUser);
           console.log('🔄 Pendo user switched to:', randomUser.visitor.firstName, randomUser.visitor.lastName);
         } else {
-          // First time initialization
-          window.pendo.initialize(randomUser);
+          // First time initialization - using exact official format
+          pendo.initialize({
+            visitor: {
+              id: randomUser.visitor.id,
+              email: randomUser.visitor.email,
+              firstName: randomUser.visitor.firstName,
+              lastName: randomUser.visitor.lastName,
+            },
+            account: {
+              id: randomUser.account.id,
+              accountName: randomUser.account.accountName,
+              payingStatus: randomUser.account.payingStatus,
+            }
+          });
           console.log('🚀 Pendo initialized with user:', randomUser.visitor.firstName, randomUser.visitor.lastName);
         }
         
